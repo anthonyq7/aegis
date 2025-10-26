@@ -3,6 +3,7 @@ from torch.utils.data import Dataset
 import pandas as pd
 
 #PyTorch's Dataset is base class for custom dataset
+#A dataset is a blueprint for how to unload and organize data -> a smart container that knows how to load, process, and return data in correct format for the model
 #torch is needed to create tensors
 class CodeDataset(Dataset):
     def __init__(self, filepath, tokenizer, max_length=512):

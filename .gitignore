@@ -8,3 +8,11 @@ data/processed/
 .DS_Store
 *.bin
 *.safetensors
+saved_models/
+checkpoints/
+*.pt
+*.pth
+*.pkl
+*.h5
+*.hdf5
+*.ckpt
