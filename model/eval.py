@@ -1,6 +1,6 @@
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from peft import PeftModel
-from dataset import CodeDataset
+from model.dataset import CodeDataset
 from sklearn.metrics import accuracy_score, f1_score
 import torch
 

@@ -34,20 +34,17 @@ pip install -r requirements.txt
 
 ### Training
 ```bash
-cd model
-python train.py
+python model/train.py
 ```
 
 ### Evaluation
 ```bash
-cd model
-python eval.py
+python model/eval.py
 ```
 
 ### Data Preprocessing
 ```bash
-cd data
-python preprocess.py
+python data/preprocess.py
 ```
 
 ## Model Performance

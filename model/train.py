@@ -1,7 +1,7 @@
 from math import e
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, TrainingArguments, Trainer
 from peft import LoraConfig, get_peft_model, TaskType
-from dataset import CodeDataset
+from model.dataset import CodeDataset
 import torch
 
 #Pre-trained CodeBERT model loaded
