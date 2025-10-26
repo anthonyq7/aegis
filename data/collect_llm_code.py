@@ -1,6 +1,5 @@
 import asyncio, os, json, logging
 from dotenv import load_dotenv
-from matplotlib.image import resample
 from openai import AsyncOpenAI
 from prompts import MODEL, get_questions, build_message
 
