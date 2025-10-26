@@ -8,10 +8,13 @@ import pandas as pd
 class CodeDataset(Dataset):
     def __init__(self, filepath, tokenizer, max_length=512):
 
+        #the jsonl data
         self.data = pd.read_json(filepath, lines=True)
 
+        #embeds
         self.tokenizer = tokenizer
 
+        #max tokens for sample
         self.max_length = max_length
 
         print(f"Loaded {len(self.data)} samples from {filepath}")
@@ -21,16 +24,17 @@ class CodeDataset(Dataset):
     def __len__(self):
         return len(self.data)
     
+    #Called verytime PyTorch needs a training example
     def __getitem__(self, index):
         row = self.data.iloc[index]
 
-        #tokenizes the sample with padding and truncation
+        #tokenizes the sample into vector with padding and truncation
         encoding = self.tokenizer(
             row["code"], #actual code string
             truncation = True, #truncates if bigger than max length
             padding = "max_length", #pads (adds token) if < max_length to reach 512 tokens
             max_length = self.max_length, #the target length: 512 tokens
-            return_tensors = "pt" #Return PyTorch tensors
+            return_tensors = "pt" #Return PyTorch tensors (multi-dimensional arrays)
         )
 
         #These specific keys are REQUIRED for most HuggingFace models like BERT
@@ -38,5 +42,5 @@ class CodeDataset(Dataset):
         return {
             "input_ids": encoding["input_ids"].flatten(), #The tokenized code
             "attention_mask": encoding["attention_mask"].flatten(), #Tells model which tokens are real vs padding
-            "labels": torch.tensor(row["label"], dtype=torch.long) #The ground truth (0 or 1)
+            "labels": torch.tensor(row["label"], dtype=torch.long) #The correct answer (0 = human or 1 = AI)
         }
