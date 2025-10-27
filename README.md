@@ -23,7 +23,7 @@ Aegis's key features reside in binary classification of Python code snippets. As
 ### Setup
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/aegis.git
+git clone https://github.com/anthonyq7/aegis.git
 cd aegis
 
 # Install dependencies
@@ -75,6 +75,3 @@ The model was trained on the APPS (Automated Programming Problem Solving) datase
 - **Learning Rate**: 1e-4
 - **Weight Decay**: 0.01
 - **Warmup Ratio**: 0.1
-
-## Contributing
-To contribute, please submit a PR. 
