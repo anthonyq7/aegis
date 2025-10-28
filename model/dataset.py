@@ -1,6 +1,7 @@
+import pandas as pd
 import torch
 from torch.utils.data import Dataset
-import pandas as pd
+
 
 #PyTorch's Dataset is base class for custom dataset
 #A dataset is a blueprint for how to unload and organize data -> a smart container that knows how to load, process, and return data in correct format for the model
@@ -18,12 +19,12 @@ class CodeDataset(Dataset):
         self.max_length = max_length
 
         print(f"Loaded {len(self.data)} samples from {filepath}")
-    
+
     #Required by PyTorch to know how many samples exist
     #Python magic method so you can do len(dataset) to find length
     def __len__(self):
         return len(self.data)
-    
+
     #Called everytime PyTorch needs a training example
     def __getitem__(self, index):
         row = self.data.iloc[index]

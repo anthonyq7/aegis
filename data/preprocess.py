@@ -1,6 +1,7 @@
+import os
+
 import pandas as pd
 from sklearn.model_selection import train_test_split
-import os
 
 IN_PATH = "data/raw"
 OUT_PATH = "data/processed"
@@ -20,7 +21,7 @@ def preprocess():
     #combined df
     combined_df = pd.concat([human_code_df, llm_code_df])
     print(f"Combined df size: {len(combined_df)}")
-    
+
     #keep track of how many duplicates
     total_duplicates = combined_df.duplicated(subset=["code"]).sum()
 
@@ -36,24 +37,24 @@ def preprocess():
     train, temp = train_test_split(combined_df, test_size=0.2, random_state=22, stratify=combined_df["label"])
     test, validate = train_test_split(temp, test_size=0.5, random_state=22, stratify=temp["label"])
 
-    train.to_json("{OUT_PATH}/train.jsonl", orient="records", lines=True)
-    test.to_json("{OUT_PATH}/test.jsonl", orient="records", lines=True)
-    validate.to_json("{OUT_PATH}/validate.jsonl", orient="records", lines=True)
+    train.to_json(f"{OUT_PATH}/train.jsonl", orient="records", lines=True)
+    test.to_json(f"{OUT_PATH}/test.jsonl", orient="records", lines=True)
+    validate.to_json(f"{OUT_PATH}/validate.jsonl", orient="records", lines=True)
 
 
     print(f"Train: {len(train)} samples - {(len(train)/len(combined_df))*100:.1f}%")
     print(f"Test: {len(test)} samples - {(len(test)/len(combined_df))*100:.1f}%")
     print(f"Validate: {len(validate)} samples - {(len(validate)/len(combined_df))*100:.1f}%")
 
-    
+
 def check_balance():
     for split in ['train', 'validate', 'test']:
         df = pd.read_json(f"{OUT_PATH}/{split}.jsonl", lines=True)
-    
+
         human = sum(df['label'] == 0)
         llm = sum(df['label'] == 1)
         total = len(df)
-    
+
         print(f"\n{split.upper()}:")
         print(f"  Total: {total}")
         print(f"  Human: {human} ({human/total*100:.1f}%)")

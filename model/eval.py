@@ -1,10 +1,19 @@
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
-from peft import PeftModel
-from dataset import CodeDataset
-from sklearn.metrics import accuracy_score, f1_score, confusion_matrix, precision_score, recall_score, ConfusionMatrixDisplay, classification_report
+import json
+import os
+
+import matplotlib.pyplot as plt
 import torch
-import matplotlib.pyplot as plt 
-import os, json
+from dataset import CodeDataset
+from peft import PeftModel
+from sklearn.metrics import (
+    ConfusionMatrixDisplay,
+    accuracy_score,
+    confusion_matrix,
+    f1_score,
+    precision_score,
+    recall_score,
+)
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 tokenizer = AutoTokenizer.from_pretrained("microsoft/codebert-base")
 base_model = AutoModelForSequenceClassification.from_pretrained(
@@ -30,7 +39,7 @@ with torch.no_grad(): #toch.nograd() disables gradient computation (saves memory
         sample = test_dataset[i]
         input_ids = sample["input_ids"].unsqueeze(0) #.unsqueeze adds a batch dimension(model expects batches, not single sample)
         attention_mask = sample["attention_mask"].unsqueeze(0)
-        
+
         outputs = model(input_ids=input_ids, attention_mask=attention_mask)
         pred = torch.argmax(outputs.logits, dim=-1).item() #Gets class with highest probability, .item() convets tensor to Python number
         predictions.append(pred)
@@ -52,10 +61,10 @@ plt.savefig(f"{OUT_PATH}/confusion_matrix.png", dpi=300, bbox_inches="tight")
 plt.close()
 
 # Calculate metrics
-accuracy = accuracy_score(true_labels, predictions) 
+accuracy = accuracy_score(true_labels, predictions)
 precision = precision_score(true_labels, predictions)
 recall = recall_score(true_labels, predictions)
-f1 = f1_score(true_labels, predictions) #harmonic mean of precision and recall 
+f1 = f1_score(true_labels, predictions) #harmonic mean of precision and recall
 
 results = {
     "model_name": "Aegis",

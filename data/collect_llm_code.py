@@ -1,7 +1,11 @@
-import asyncio, os, json, logging
+import asyncio
+import json
+import logging
+import os
+
 from dotenv import load_dotenv
 from openai import AsyncOpenAI
-from prompts import MODEL, get_questions, build_message
+from prompts import MODEL, build_message, get_questions
 
 #CONSTANTS AND CONFIGURATIONS
 load_dotenv()
@@ -25,17 +29,17 @@ async def generate_code(prompt, semaphore, max_retries=2):
 
                 result = response.output_text
 
-                if result and result.strip(): 
+                if result and result.strip():
                     return result
                 else:
                     print(f"Empty response on attempt {attempt + 1}, retrying...")
-                    
+
             except Exception as e:
                 print(f"Attempt {attempt + 1} failed: {e}")
-            
+
                 if attempt < max_retries - 1:
                     await asyncio.sleep(TIME_SLEEP)
-        
+
         print(f"Failed to generate code after {max_retries} attempts")
         return None
 
@@ -71,7 +75,7 @@ async def generate_all(max_concurrent=10):
                     file.write(json.dumps(x) + "\n")
                 file.flush()
                 count += len(buffer)
-        
+
         print("Finished generating data")
     except Exception as e:
         print(f"API Error: {e}")

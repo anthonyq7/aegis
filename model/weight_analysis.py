@@ -1,9 +1,11 @@
-import torch, os, json
-import numpy as np
+import json
+import os
+
 import matplotlib.pyplot as plt
 import seaborn as sns
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import torch
 from peft import PeftModel
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 OUT_PATH = "model/results"
 READ_FILE_PATH = "data/processed/test.jsonl"
@@ -14,8 +16,8 @@ def get_attention_weights(model, tokenizer, code_snippet):
     inputs = tokenizer(
         code_snippet,
         truncation = True,
-        padding = "max_length", 
-        max_length = 512, 
+        padding = "max_length",
+        max_length = 512,
         return_tensors = "pt"
     )
 
@@ -38,12 +40,12 @@ def visualize_attention(attention, tokens, layer=-1, head=0):
 
     #getting the attention weights for specified layer
     attn_weights = attention[layer][0, head].cpu().numpy()
-    
+
     #limiting to first 60 tokens for readability
     max_tokens = 60
     attn_weights = attn_weights[:max_tokens, :max_tokens]
     tokens = tokens[:max_tokens]
-    
+
     #create heatmap
     plt.figure(figsize=(16, 14))
     sns.heatmap(

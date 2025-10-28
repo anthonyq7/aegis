@@ -1,8 +1,10 @@
-from datasets import load_dataset
-import json, os
-from huggingface_hub import login
-from dotenv import load_dotenv
+import json
+import os
 import random
+
+from datasets import load_dataset
+from dotenv import load_dotenv
+from huggingface_hub import login
 
 load_dotenv()
 HUGGING_FACE_TOKEN=os.getenv("HUGGING_FACE_TOKEN", "")
@@ -11,7 +13,7 @@ random.seed(22)
 #authenticate code
 login(token=HUGGING_FACE_TOKEN)
 
-IN_PATH = "data/raw/train.jsonl"          
+IN_PATH = "data/raw/train.jsonl"
 PATH = "data/raw"
 N_TARGET = 5000
 os.makedirs(PATH, exist_ok=True)
@@ -29,10 +31,10 @@ def collect_human_code():
 
                 question = sample.get("question", "")
                 raw_solution = sample.get("solutions", "")
-                
+
                 if not raw_solution or raw_solution.strip() == "":
                     continue
-                    
+
                 try:
                     solutions = json.loads(raw_solution)
                     if not solutions or len(solutions) == 0:
@@ -49,7 +51,7 @@ def collect_human_code():
                 starter_code = sample.get("starter_code", "")
 
                 sample_metadata = {"question": question, "solution": solution, "starter_code": starter_code, "label": 0}
-                file.write(json.dumps(sample_metadata) + "\n") 
+                file.write(json.dumps(sample_metadata) + "\n")
 
                 count += 1
 
@@ -74,16 +76,16 @@ def split_code(in_path, out_path, question_path):
             to_store = {"question": entry.get("question"), "starter_code": entry.get("starter_code")}
             llm_question_list.append(to_store)
 
-    
+
     with open(out_path, "w") as file:
         for sample in human_list:
             file.write(json.dumps(sample) + "\n")
-    
+
     with open(question_path, "w") as file:
         for sample in llm_question_list:
             file.write(json.dumps(sample) + "\n")
 
-            
+
 
 def main():
     collect_human_code()

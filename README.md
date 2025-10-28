@@ -6,11 +6,11 @@ Aegis is a fine-tuned CodeBERT model that classifies AI-generated and human code
 ## Problem Statement
 **Can we detect AI-generated code in academic and professional settings?**
 
-Generative AI has been integrated across various workflows, notably for coding tasks. The actually source of code, especially for academic integrity purposes, has come into question. This projects fine-tunes CODEBERT to explore:
+Generative AI has been integrated across various workflows, notably for coding tasks. The actual source of code, especially for academic integrity purposes, has come into question. This projects fine-tunes CODEBERT to explore:
 
 1.**Classifying code origin**: Is it human or AI?
 2.**Exploring detecton limits**: Where does the model fail?
-3.**Inform Policy**: To what it extent are its applications?
+3.**Inform Policy**: To what extent are its applications?
 
 The model is evaluated on datasets of human and AI-generated solutions to similar competitive programming problems written in Python.  
 
@@ -42,12 +42,12 @@ The model was trained on the APPS (Automated Programming Problem Solving) datase
 - Balanced train/validation/test splits (80%/10%/10%)
 - Duplicate removal and stratified sampling for balanced classes
 
-Although the dataset for the training data is relatively small, it provided a consistent and predictable format for LLM-genererated Python code samples. Additionally, a separate subset of questions were formed into prompts for the LLM-generated Python code samples to reduce leakage. 
+Although the dataset for the training data is relatively small, it provided a consistent and predictable format for LLM-generated Python code samples. Additionally, a separate subset of questions were formed into prompts for the LLM-generated Python code samples to reduce leakage. 
 
 CodeParrot APPS Hugging Face: [Link](https://huggingface.co/datasets/codeparrot/apps)
 
 ## Methods
-Simply writing scripts to collect the sample data wasn't sufficient. There were many markers that were unpredictable in style on human code: excerpts of the question, comments to mark the author, and watermarks. Given the small size of the dataset, such watermarks were manually removed to make the human code more homogenous. While writing scipts to perform cleaning is more effective, especially when working with larger datasets, manual cleanup in this case saved roughly 90 to 120 minutes. 
+Simply writing scripts to collect the sample data wasn't sufficient. There were many markers that were unpredictable in style on human code: excerpts of the question, comments to mark the author, and watermarks. Given the small size of the dataset, such watermarks were manually removed to make the human code more homogenous. While writing scripts to perform cleaning is more effective, especially when working with larger datasets, manual cleanup in this case saved roughly 90 to 120 minutes. 
 
 After the AI-generated data was collected it was processed alongside the human code dataset. Duplicates were dropped before the datasets were combined and shuffled. The train, validation, and test splits were chosen to be 80%, 10%, 10% respectively: an standard split. 
 
@@ -99,16 +99,16 @@ Positive = AI-generated (target class)
 Negative = Human (baseline)
 
 ### Results Analysis
-Aegis had an accuracy of 80.75%, a precision of 74.50%, and a recall of 93.50%. The results indicate that of the predictions flagged as AI-generated, 74.50% were correct. Additionally, the recall of 93.50% suggests that the vast majority of AI code was flagged. The confusion matrix tells a similar story, with 13/200 AI samples correctly identified, leaving only 13 false negatives. The high recall and lower precision demonstrates that the model skews towards flagging AI code. However, Aegis struggles with false positives: of the 200 human code samples 64 were misclassified as AI, a rate of 32%. 
+Aegis had an accuracy of 80.75%, a precision of 74.50%, and a recall of 93.50%. The results indicate that of the predictions flagged as AI-generated, 74.50% were correct. Additionally, the recall of 93.50% suggests that the vast majority of AI code was flagged. The confusion matrix tells a similar story, with 187/200 AI samples correctly identified, leaving only 13 false negatives. The high recall and lower precision demonstrates that the model skews towards flagging AI code. However, Aegis struggles with false positives: of the 200 human code samples 64 were misclassified as AI, a rate of 32%. 
 
 ### Attention Weights Analysis
 ![Alt text](model/results/attention_weights.png)
 
 ### Error Analysis
-The false positve rate of 32% can be attributed to two sources of error: manual data cleaning and the small sample size. The removal author comments, watermarks, and other artifcats in human code reduced authentic human variation in the training data, increasing the homogeneity of the human and AI-generated code. The 64 false positives were likely a result of human code looking clean and strucutured, resembling AI output. Additionally, the small sample size resulted in less coverage of code style and less variation, potentially allowing for the learning of false patterns. 
+The false positive rate of 32% can be attributed to two sources of error: manual data cleaning and the small sample size. The removal of author comments, watermarks, and other artifcats in human code reduced authentic human variation in the training data, increasing the homogeneity of the human and AI-generated code. The 64 false positives were likely a result of human code looking clean and structured, resembling AI output. Additionally, the small sample size resulted in less coverage of code style and less variation, potentially allowing for the learning of false patterns. 
 
 ### Implications
-A high recall of 93.50 suggest a reasonable accuracy for use in academic integrity settings. However, the 32% rate of false positives for human can lead to unfair suspicion. Regardless, Aegis's strength lies in its ability to reliably flag AI code. Further investigation can be conducted in the future to limit false by expanding training data and adding additional classes, such as "Likely AI" class. 
+A high recall of 93.50 suggest a reasonable accuracy for use in academic integrity settings. However, the 32% rate of false positives for human can lead to unfair suspicion. Regardless, Aegis's strength lies in its ability to reliably flag AI code. Further investigation can be conducted in the future to limit false positives by expanding training data and adding additional classes, such as "Likely AI" class. 
 
 ## Installation
 

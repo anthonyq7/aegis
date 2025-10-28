@@ -1,7 +1,14 @@
-from transformers import AutoTokenizer, AutoModelForSequenceClassification, TrainingArguments, Trainer
-from peft import LoraConfig, get_peft_model, TaskType
+import os
+
+import torch
 from dataset import CodeDataset
-import torch, os
+from peft import LoraConfig, TaskType, get_peft_model
+from transformers import (
+    AutoModelForSequenceClassification,
+    AutoTokenizer,
+    Trainer,
+    TrainingArguments,
+)
 
 IN_PATH = "data/processed"
 os.makedirs(IN_PATH, exist_ok=True)
@@ -40,7 +47,7 @@ val_dataset = CodeDataset(f"{IN_PATH}/validate.jsonl", tokenizer)
 training_args = TrainingArguments(
     output_dir="./saved_models/aegis",
     num_train_epochs=3,
-    per_device_eval_batch_size=4, 
+    per_device_eval_batch_size=4,
     per_device_train_batch_size=4, #4 samples at once during training
     gradient_accumulation_steps=8, #accumulate gradients over 8 minibatches before updating (4*8 is effective batch size)
     learning_rate=1e-4, #how big steos to take whne updating model paramters

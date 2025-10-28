@@ -1,5 +1,5 @@
-from textwrap import dedent
 import json
+from textwrap import dedent
 
 SYSTEM_PROMPT = dedent("""
 You are a competitive programmer writing solutions during a contest.
@@ -61,9 +61,9 @@ def get_questions(path: str):
             question = data.get("question").strip()
             starter_code = data.get("starter_code").strip()
             questions.append({"question": question, "starter_code": starter_code})
-    
+
     return questions
-    
+
 
 def build_message(question: str, starter_code: str):
 
@@ -90,4 +90,4 @@ def build_message(question: str, starter_code: str):
     ]
 
     return prompt
-    
+
