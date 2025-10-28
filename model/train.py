@@ -1,7 +1,10 @@
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, TrainingArguments, Trainer
 from peft import LoraConfig, get_peft_model, TaskType
-from model.dataset import CodeDataset
-import torch
+from dataset import CodeDataset
+import torch, os
+
+IN_PATH = "data/processed"
+os.makedirs(IN_PATH, exist_ok=True)
 
 #Pre-trained CodeBERT model loaded
 tokenizer = AutoTokenizer.from_pretrained("microsoft/codebert-base")
@@ -30,8 +33,8 @@ model = get_peft_model(model, lora_config)
 model.print_trainable_parameters()
 
 #load datasets
-train_dataset = CodeDataset("data/processed/train.jsonl", tokenizer)
-val_dataset = CodeDataset("data/processed/validate.jsonl", tokenizer)
+train_dataset = CodeDataset(f"{IN_PATH}/train.jsonl", tokenizer)
+val_dataset = CodeDataset(f"{IN_PATH}/validate.jsonl", tokenizer)
 
 #Training Arguments
 training_args = TrainingArguments(

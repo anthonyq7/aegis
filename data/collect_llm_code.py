@@ -3,11 +3,13 @@ from dotenv import load_dotenv
 from openai import AsyncOpenAI
 from prompts import MODEL, get_questions, build_message
 
+#CONSTANTS AND CONFIGURATIONS
 load_dotenv()
 client = AsyncOpenAI()
 MAX_OUTPUT_TOKENS = 5000
 TIME_SLEEP = 5
-
+PATH = "data/raw"
+os.makedirs(PATH, exist_ok=True)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -40,9 +42,9 @@ async def generate_code(prompt, semaphore, max_retries=2):
 async def generate_all(max_concurrent=10):
     try:
         count = 0
-        with open("data/raw/llm_code.jsonl", "a", encoding="utf-8") as file:
+        with open(f"{PATH}/llm_code.jsonl", "a", encoding="utf-8") as file:
             semaphore = asyncio.Semaphore(max_concurrent)
-            questions = get_questions("data/raw/llm_questions.jsonl")
+            questions = get_questions(f"{PATH}/llm_questions.jsonl")
             logger.info(f"Starting generation for {len(questions)} questions with max_concurrent={max_concurrent}")
 
             tasks = []
@@ -76,7 +78,6 @@ async def generate_all(max_concurrent=10):
 
 def main():
     asyncio.run(generate_all())
-
 
 if __name__ == "__main__":
     main()

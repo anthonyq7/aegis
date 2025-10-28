@@ -2,11 +2,17 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 import os
 
+IN_PATH = "data/raw"
+OUT_PATH = "data/processed"
+
+os.makedirs(IN_PATH, exist_ok=True)
+os.makedirs(OUT_PATH, exist_ok=True)
+
 #Returns train split, test split, and validation split
 def preprocess():
     #lines is import since it's json lines file
-    human_code_df = pd.read_json("data/raw/human_clean.jsonl", lines=True)
-    llm_code_df = pd.read_json("data/raw/llm_code.jsonl", lines=True)
+    human_code_df = pd.read_json(f"{IN_PATH}/human_clean.jsonl", lines=True)
+    llm_code_df = pd.read_json(f"{IN_PATH}/llm_code.jsonl", lines=True)
 
     human_code_df = human_code_df.iloc[:2000]
     llm_code_df = llm_code_df.iloc[:2000]
@@ -19,22 +25,20 @@ def preprocess():
     total_duplicates = combined_df.duplicated(subset=["code"]).sum()
 
     #drop duplicates
-    combined_df.drop_duplicates(subset=["code"], keep="first")
+    combined_df = combined_df.drop_duplicates(subset=["code"], keep="first")
     print(f"Total number of duplicates: {total_duplicates}")
 
     #shuffle combined df
-    combined_df.sample(frac=1, random_state=22).reset_index(drop=True)
+    combined_df = combined_df.sample(frac=1, random_state=22).reset_index(drop=True)
 
     #split into train, test, and validation
     #stratify ensures that there's an even split, i.e. stratified lol
     train, temp = train_test_split(combined_df, test_size=0.2, random_state=22, stratify=combined_df["label"])
     test, validate = train_test_split(temp, test_size=0.5, random_state=22, stratify=temp["label"])
 
-    os.makedirs("data/processed", exist_ok=True)
-
-    train.to_json("data/processed/train.jsonl", orient="records", lines=True)
-    test.to_json("data/processed/test.jsonl", orient="records", lines=True)
-    validate.to_json("data/processed/validate.jsonl", orient="records", lines=True)
+    train.to_json("{OUT_PATH}/train.jsonl", orient="records", lines=True)
+    test.to_json("{OUT_PATH}/test.jsonl", orient="records", lines=True)
+    validate.to_json("{OUT_PATH}/validate.jsonl", orient="records", lines=True)
 
 
     print(f"Train: {len(train)} samples - {(len(train)/len(combined_df))*100:.1f}%")
@@ -44,7 +48,7 @@ def preprocess():
     
 def check_balance():
     for split in ['train', 'validate', 'test']:
-        df = pd.read_json(f'data/processed/{split}.jsonl', lines=True)
+        df = pd.read_json(f"{OUT_PATH}/{split}.jsonl", lines=True)
     
         human = sum(df['label'] == 0)
         llm = sum(df['label'] == 1)

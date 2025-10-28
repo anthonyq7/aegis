@@ -24,7 +24,7 @@ class CodeDataset(Dataset):
     def __len__(self):
         return len(self.data)
     
-    #Called verytime PyTorch needs a training example
+    #Called everytime PyTorch needs a training example
     def __getitem__(self, index):
         row = self.data.iloc[index]
 

@@ -1,0 +1,29 @@
+{
+    "model_name": "Aegis",
+    "metrics": {
+        "accuracy": "0.8075",
+        "precision": "0.7450",
+        "recall": "0.9350",
+        "f1": "0.8293"
+    },
+    "confusion_matrix": {
+        "values": [
+            [
+                136,
+                64
+            ],
+            [
+                13,
+                187
+            ]
+        ],
+        "labels": [
+            "Human",
+            "AI-Generated"
+        ],
+        "true_negatives": 136,
+        "false_positives": 64,
+        "false_negatives": 13,
+        "true_positives": 187
+    }
+}

@@ -1,0 +1,47 @@
+[project]
+name = "aegis"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "accelerate>=0.20.0",
+    "datasets>=2.0.0",
+    "huggingface-hub>=0.15.0",
+    "matplotlib>=3.10.7",
+    "numpy>=1.21.0",
+    "openai>=1.0.0",
+    "pandas>=1.5.0",
+    "peft>=0.4.0",
+    "pytest>=8.4.2",
+    "python-dotenv>=0.19.0",
+    "safetensors>=0.3.0",
+    "scikit-learn>=1.0.0",
+    "seaborn>=0.13.2",
+    "torch>=2.0.0",
+    "tqdm>=4.60.0",
+    "transformers>=4.30.0",
+    "ruff>=0.6.0",
+]
+
+[tool.ruff]
+# Enable pycodestyle and pyflakes rules
+select = ["E", "W", "F", "I", "N"]
+ignore = ["E501"]  # Ignore line length (black handles this)
+
+# Exclude common directories
+exclude = [
+    ".git",
+    "__pycache__",
+    ".venv",
+    "venv",
+    "node_modules",
+    "build",
+    "dist",
+    "*.egg-info",
+    "saved_models",
+    "data/raw",
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]  # Allow unused imports in __init__.py

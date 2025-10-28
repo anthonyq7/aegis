@@ -12,10 +12,9 @@ random.seed(22)
 login(token=HUGGING_FACE_TOKEN)
 
 IN_PATH = "data/raw/train.jsonl"          
-OUT_PATH = "data/raw"
+PATH = "data/raw"
 N_TARGET = 5000
-
-os.makedirs(OUT_PATH, exist_ok=True)
+os.makedirs(PATH, exist_ok=True)
 
 
 
@@ -23,7 +22,7 @@ def collect_human_code():
     ds = load_dataset("json", data_files=IN_PATH, split="train")
     try:
         count = 0
-        with open("data/raw/human_code.jsonl", "w", encoding="utf-8") as file:
+        with open(f"{PATH}/human_code.jsonl", "w", encoding="utf-8") as file:
             for sample in ds:
                 if count >= N_TARGET:
                     break
@@ -92,7 +91,7 @@ def main():
 
 if __name__ == "__main__":
     main()
-    split_code("data/raw/human_code.jsonl", "data/raw/human_clean.jsonl", "data/raw/llm_questions.jsonl")
+    split_code(f"{PATH}/human_code.jsonl", f"{PATH}/human_clean.jsonl", f"{PATH}/llm_questions.jsonl")
 
 
 

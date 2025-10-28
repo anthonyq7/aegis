@@ -1,8 +1,10 @@
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from peft import PeftModel
-from model.dataset import CodeDataset
-from sklearn.metrics import accuracy_score, f1_score
+from dataset import CodeDataset
+from sklearn.metrics import accuracy_score, f1_score, confusion_matrix, precision_score, recall_score, ConfusionMatrixDisplay, classification_report
 import torch
+import matplotlib.pyplot as plt 
+import os, json
 
 tokenizer = AutoTokenizer.from_pretrained("microsoft/codebert-base")
 base_model = AutoModelForSequenceClassification.from_pretrained(
@@ -10,10 +12,14 @@ base_model = AutoModelForSequenceClassification.from_pretrained(
     num_labels=2
 )
 
+IN_PATH = "data/processed"
+OUT_PATH = "model/results"
+os.makedirs(OUT_PATH, exist_ok=True)
+
 #Load original CodeBERT model and fine-tuned LoRA wieghts on top of base model
 model = PeftModel.from_pretrained(base_model, "./saved_models/aegis_final")
 
-test_dataset = CodeDataset("data/processed/test.jsonl", tokenizer)
+test_dataset = CodeDataset(f"{IN_PATH}/test.jsonl", tokenizer)
 
 model.eval() #puts model in eval mode (disables dropout, batch norm updates)
 predictions = []
@@ -30,8 +36,46 @@ with torch.no_grad(): #toch.nograd() disables gradient computation (saves memory
         predictions.append(pred)
         true_labels.append(sample["labels"].item())
 
+cm = confusion_matrix(true_labels, predictions)
+
+disp = ConfusionMatrixDisplay(
+    confusion_matrix=cm,
+    display_labels=["Human", "AI-Generated"]
+)
+
+disp.plot(cmap="Blues", values_format="d")
+plt.title("Aegis: Code Origin Classification", fontsize=14, pad=15)
+plt.xlabel("Predicted Label", fontsize=12)
+plt.ylabel("True Label", fontsize=12)
+plt.tight_layout()
+plt.savefig(f"{OUT_PATH}/confusion_matrix.png", dpi=300, bbox_inches="tight")
+plt.close()
+
+# Calculate metrics
 accuracy = accuracy_score(true_labels, predictions) 
+precision = precision_score(true_labels, predictions)
+recall = recall_score(true_labels, predictions)
 f1 = f1_score(true_labels, predictions) #harmonic mean of precision and recall 
 
-print(f"Accuracy: {accuracy:.4f}")
-print(f"F1-Score: {f1:.4f}")
+results = {
+    "model_name": "Aegis",
+    "metrics": {
+        "accuracy": f"{float(accuracy):.4f}",
+        "precision": f"{float(precision):.4f}",
+        "recall": f"{float(recall):.4f}",
+        "f1": f"{float(f1):.4f}",
+    },
+    "confusion_matrix": {
+        "values": cm.tolist(),
+        "labels": ["Human", "AI-Generated"],
+        "true_negatives": int(cm[0, 0]),
+        "false_positives": int(cm[0, 1]),
+        "false_negatives": int(cm[1, 0]),
+        "true_positives": int(cm[1, 1])
+    }
+}
+
+with open(f"{OUT_PATH}/model_results.json", "w") as file:
+    file.write(json.dumps(results, indent=4))
+
+print(f"Results saved to {OUT_PATH}/model_results.json")
