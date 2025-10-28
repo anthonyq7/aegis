@@ -96,6 +96,7 @@ Training ran for 3 epochs, sufficient as most gains occur within the first 2 to 
 ## Analysis
 
 Positive = AI-generated (target class)
+
 Negative = Human (baseline)
 
 ### Results Analysis
