@@ -5,6 +5,7 @@ Aegis is a fine-tuned CodeBERT model that classifies AI-generated and human code
 
 ## Problem Statement
 **Can we detect AI-generated code in academic and professional settings?**
+
 Generative AI has been integrated across various workflows, notably for coding tasks. The actual source of code, especially for academic integrity purposes, has come into question. This projects fine-tunes CODEBERT to explore:
 
 1. **Classifying code origin**: Is it human or AI?
