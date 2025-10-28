@@ -1,3 +1,4 @@
+
 import json
 import os
 import random
@@ -20,7 +21,7 @@ os.makedirs(PATH, exist_ok=True)
 
 
 
-def collect_human_code():
+def collect_human_code() -> None:
     ds = load_dataset("json", data_files=IN_PATH, split="train")
     try:
         count = 0
@@ -41,7 +42,7 @@ def collect_human_code():
                         continue
 
                     solution = random.choice(solutions)
-                except:
+                except (json.JSONDecodeError):
                     print("Empty solution")
                     continue
 
@@ -59,7 +60,7 @@ def collect_human_code():
         raise Exception(f"Failed to collect human samples: {e}")
 
 #splits 2000 human code responses and splits the other half as questions for LLM
-def split_code(in_path, out_path, question_path):
+def split_code(in_path: str, out_path: str, question_path: str) -> None:
     human_list = []
     llm_question_list = []
     raw_list = []
@@ -87,7 +88,7 @@ def split_code(in_path, out_path, question_path):
 
 
 
-def main():
+def main() -> None:
     collect_human_code()
     print("Finished collecting human samples")
 

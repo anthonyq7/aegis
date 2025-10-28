@@ -1,3 +1,4 @@
+
 import os
 
 import pandas as pd
@@ -10,7 +11,7 @@ os.makedirs(IN_PATH, exist_ok=True)
 os.makedirs(OUT_PATH, exist_ok=True)
 
 #Returns train split, test split, and validation split
-def preprocess():
+def preprocess() -> None:
     #lines is import since it's json lines file
     human_code_df = pd.read_json(f"{IN_PATH}/human_clean.jsonl", lines=True)
     llm_code_df = pd.read_json(f"{IN_PATH}/llm_code.jsonl", lines=True)
@@ -47,7 +48,7 @@ def preprocess():
     print(f"Validate: {len(validate)} samples - {(len(validate)/len(combined_df))*100:.1f}%")
 
 
-def check_balance():
+def check_balance() -> None:
     for split in ['train', 'validate', 'test']:
         df = pd.read_json(f"{OUT_PATH}/{split}.jsonl", lines=True)
 

@@ -1,14 +1,15 @@
 import json
 from textwrap import dedent
+from typing import Dict, List
 
 SYSTEM_PROMPT = dedent("""
 You are a competitive programmer writing solutions during a contest.
-Write complete, working Python solutions that feel human-written and look like they were written with limited time and constraints. 
+Write complete, working Python solutions that feel human-written and look like they were written with limited time and constraints.
 
 CRITICAL: Always include the entire starter code (function signatures, class definitions) in your solution.
 
-IMPORTANT: 
-- Your solution must include the entire starter code, even class deinitions. 
+IMPORTANT:
+- Your solution must include the entire starter code, even class deinitions.
 - Complete the function/class or add the necessary code to solve the problem.
 
 Variable Naming - Prefer short, casual names:
@@ -21,10 +22,10 @@ Code Style - Mix and vary naturally:
 - Use comprehensions when they feel right [x for x in arr if x>0]
 - Throw in lambda occasionally: sorted(x, key=lambda y: y[0])
 - Inline conditions: ans = x if x > 0 else 0
-- RARELY comment. Most solutions have NO comments. You are working under the gun. 
+- RARELY comment. Most solutions have NO comments. You are working under the gun.
 
 Imports - Keep it practical:
-- Only use imports when ABSOLUTELY necessary. 
+- Only use imports when ABSOLUTELY necessary.
 - USUALLY PLACE within the SOLUTION classes or functions
 - Mix styles: "import sys" and "from math import gcd"
 - Occasionally place an import later if you forgot
@@ -44,7 +45,7 @@ Write your solution like a human during a contest:
 - If the problem is complex, break out a helper function
 - Import what you need (collections, sys, math, etc.) - usually at top
 - Be slightly inconsistent and imperfect like real human code
-    
+
 Focus on correctness first, clean code second.
 Return only executable Python code - no markdown or explanations.
 """).strip()
@@ -53,7 +54,7 @@ Return only executable Python code - no markdown or explanations.
 
 MODEL = "gpt-5-mini"
 
-def get_questions(path: str):
+def get_questions(path: str) -> List[Dict[str, str]]:
     questions = []
     with open(path, "r") as file:
         for line in file:
@@ -65,7 +66,7 @@ def get_questions(path: str):
     return questions
 
 
-def build_message(question: str, starter_code: str):
+def build_message(question: str, starter_code: str) -> List[Dict[str, str]]:
 
     user = dedent(f"""
     Solve this competitive programming problem in Python.

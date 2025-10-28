@@ -1,13 +1,16 @@
+from typing import Any, Dict
+
 import pandas as pd
 import torch
 from torch.utils.data import Dataset
+from transformers import AutoTokenizer
 
 
 #PyTorch's Dataset is base class for custom dataset
 #A dataset is a blueprint for how to unload and organize data -> a smart container that knows how to load, process, and return data in correct format for the model
 #torch is needed to create tensors
 class CodeDataset(Dataset):
-    def __init__(self, filepath, tokenizer, max_length=512):
+    def __init__(self, filepath: str, tokenizer: AutoTokenizer, max_length: int = 512) -> None:
 
         #the jsonl data
         self.data = pd.read_json(filepath, lines=True)
@@ -22,11 +25,11 @@ class CodeDataset(Dataset):
 
     #Required by PyTorch to know how many samples exist
     #Python magic method so you can do len(dataset) to find length
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.data)
 
     #Called everytime PyTorch needs a training example
-    def __getitem__(self, index):
+    def __getitem__(self, index: int) -> Dict[str, Any]:
         row = self.data.iloc[index]
 
         #tokenizes the sample into vector with padding and truncation

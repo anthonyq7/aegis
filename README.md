@@ -9,7 +9,7 @@ Aegis is a fine-tuned CodeBERT model that classifies AI-generated and human code
 Generative AI has been integrated across various workflows, notably for coding tasks. The actual source of code, especially for academic integrity purposes, has come into question. This projects fine-tunes CODEBERT to explore:
 
 1. **Classifying code origin**: Is it human or AI?
-2. **Exploring detecton limits**: Where does the model fail?
+2. **Exploring detection limits**: Where does the model fail?
 3. **Inform Policy**: To what extent are its applications?
 
 The model is evaluated on datasets of human and AI-generated solutions to similar competitive programming problems written in Python.  
@@ -47,14 +47,14 @@ Although the dataset for the training data is relatively small, it provided a co
 CodeParrot APPS Hugging Face: [Link](https://huggingface.co/datasets/codeparrot/apps)
 
 ## Methods
-Simply writing scripts to collect the sample data wasn't sufficient. There were many markers that were unpredictable in style on human code: excerpts of the question, comments to mark the author, and watermarks. Given the small size of the dataset, such watermarks were manually removed to make the human code more homogenous. While writing scripts to perform cleaning is more effective, especially when working with larger datasets, manual cleanup in this case saved roughly 90 to 120 minutes. 
+Simply writing scripts to collect the sample data wasn't sufficient. There were many unpredictable markers in the human code: excerpts of the question, comments to mark the author, and watermarks. Given the small size of the dataset, such watermarks were manually removed to make the human code more homogenous. While writing scripts to perform cleaning is more effective, especially when working with larger datasets, manual cleanup in this case saved roughly 90 to 120 minutes. 
 
 After the AI-generated data was collected it was processed alongside the human code dataset. Duplicates were dropped before the datasets were combined and shuffled. The train, validation, and test splits were chosen to be 80%, 10%, 10% respectively: an standard split. 
 
 The model training was conducted using LoRA (Low-Rank Adaption). This allowed for more efficient training in terms of computation and speed. The pretrained CodeBERT base weights were kept frozen and learned a low-rank update. This created an new, effective weight:
 
 $$
-W_{\text{eff}} = W + \Delta W = W + \frac{\alpha}{r}\, B A
+W_{\text{eff}} = W + \Delta W = W + \frac{\alpha}{r} B A
 $$
 
 $$
@@ -104,8 +104,10 @@ Aegis had an accuracy of 80.75%, a precision of 74.50%, and a recall of 93.50%. 
 ### Attention Weights Analysis
 ![Alt text](model/results/attention_weights.png)
 
+The figure above displays the attention weights for the first tokens of an input in Head 0 of the last encoding layer (Layer -1). The vertical orange columns suggest a strong relationship between the query tokens and the <s>, Ċ, and </s> key tokens. <s> and </s> often represent BOS (Begin-Of-Sequence) and EOS (End-Of-Sequence), attracting strong attention as they act like anchors for the sequence. However, Ċ is a stand-in for a newline character (think \n), implying Aegis attends to line breaks. Newlines, indentations, and definition blocks comprise common structural cues for Python code, and the model being aware of newlines to orient itself in a function block is reasonable. Additionally, the faint diagonal from the top-left to bottom-right in the figure indicates that tokens often look at nearby neighbors, which makes sense given Python's reliance on local context.
+
 ### Error Analysis
-The false positive rate of 32% can be attributed to two sources of error: manual data cleaning and the small sample size. The removal of author comments, watermarks, and other artifcats in human code reduced authentic human variation in the training data, increasing the homogeneity of the human and AI-generated code. The 64 false positives were likely a result of human code looking clean and structured, resembling AI output. Additionally, the small sample size resulted in less coverage of code style and less variation, potentially allowing for the learning of false patterns. 
+The false positive rate of 32% can be attributed to two sources of error: manual data cleaning and the small sample size. The removal of author comments, watermarks, and other artifacts in human code reduced authentic human variation in the training data, increasing the homogeneity of the human and AI-generated code. The 64 false positives were likely a result of human code looking clean and structured, resembling AI output. Additionally, the small sample size resulted in less coverage of code style and less variation, potentially allowing for the learning of false patterns. 
 
 ### Implications
 A high recall of 93.50 suggest a reasonable accuracy for use in academic integrity settings. However, the 32% rate of false positives for human can lead to unfair suspicion. Regardless, Aegis's strength lies in its ability to reliably flag AI code. Further investigation can be conducted in the future to limit false positives by expanding training data and adding additional classes, such as "Likely AI" class. 
@@ -113,11 +115,12 @@ A high recall of 93.50 suggest a reasonable accuracy for use in academic integri
 ## Installation
 
 ### Requirements
-- Python 3.13+
-- PyTorch
-- Transformers
-- PEFT (Parameter Efficient Fine-Tuning)
-
+- **Python**: 3.13+
+- **ML/AI**: PyTorch, Transformers, PEFT, Accelerate
+- **Data**: pandas, NumPy, Datasets
+- **Visualization**: matplotlib, seaborn
+- **ML Utils**: scikit-learn, safetensors, Hugging Face Hub, tqdm
+- **Tools**: OpenAI, python-dotenv, pytest, Ruff
 
 ### Setup
 ```bash
@@ -157,6 +160,9 @@ If you'd like to help, please follow these steps:
 
 Ensure your code follows the existing style and passes any tests before submitting. 
 Open an issue or submit a suggestion if you're unsure where to start. 
+
+## Contact
+**Email**: a.j.qin@wustl.edu
 
 ## License
 This project is licensed under the [MIT License](LICENSE).

@@ -2,6 +2,7 @@ import asyncio
 import json
 import logging
 import os
+from typing import Dict, List
 
 from dotenv import load_dotenv
 from openai import AsyncOpenAI
@@ -17,7 +18,7 @@ os.makedirs(PATH, exist_ok=True)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-async def generate_code(prompt, semaphore, max_retries=2):
+async def generate_code(prompt: List[Dict[str, str]], semaphore: asyncio.Semaphore, max_retries: int = 2) -> str | None:
     async with semaphore:
         for attempt in range(max_retries):
             try:
@@ -43,7 +44,7 @@ async def generate_code(prompt, semaphore, max_retries=2):
         print(f"Failed to generate code after {max_retries} attempts")
         return None
 
-async def generate_all(max_concurrent=10):
+async def generate_all(max_concurrent: int = 10) -> None:
     try:
         count = 0
         with open(f"{PATH}/llm_code.jsonl", "a", encoding="utf-8") as file:
@@ -80,7 +81,7 @@ async def generate_all(max_concurrent=10):
     except Exception as e:
         print(f"API Error: {e}")
 
-def main():
+def main() -> None:
     asyncio.run(generate_all())
 
 if __name__ == "__main__":

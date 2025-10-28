@@ -1,5 +1,6 @@
 import json
 import os
+from typing import Any, Dict, List, Tuple
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -11,7 +12,7 @@ OUT_PATH = "model/results"
 READ_FILE_PATH = "data/processed/test.jsonl"
 os.makedirs(OUT_PATH, exist_ok=True)
 
-def get_attention_weights(model, tokenizer, code_snippet):
+def get_attention_weights(model: PeftModel, tokenizer: AutoTokenizer, code_snippet: str) -> Tuple[Tuple, Dict[str, Any]]:
 
     inputs = tokenizer(
         code_snippet,
@@ -32,7 +33,7 @@ def get_attention_weights(model, tokenizer, code_snippet):
     return attention, inputs
 
 
-def visualize_attention(attention, tokens, layer=-1, head=0):
+def visualize_attention(attention: Tuple[Any, ...], tokens: List[str], layer: int = -1, head: int = 0) -> None:
     #attention: tuple of attention tensors from model
     #tokens: list of tokens
     #layer: which transformer layer to visualize (-1 for last layer)
@@ -64,7 +65,7 @@ def visualize_attention(attention, tokens, layer=-1, head=0):
     plt.savefig(f"{OUT_PATH}/attention_weights.png", dpi=300, bbox_inches="tight")
     plt.close()
 
-def main():
+def main() -> None:
     tokenizer = AutoTokenizer.from_pretrained("microsoft/codebert-base")
     base_model = AutoModelForSequenceClassification.from_pretrained(
         "microsoft/codebert-base",
