@@ -177,10 +177,10 @@ pytest tests/
 pytest tests/ -v
 
 # Run a specific test file
-pytest tests/test.py
+pytest tests/test_basic.py
 
 # Or run tests directly
-python tests/test.py
+python tests/test_basic.py
 ```
 
 The test suite includes:
