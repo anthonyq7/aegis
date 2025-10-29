@@ -113,7 +113,7 @@ The figure above displays the attention weights for the first tokens of an input
 The false positive rate of 32% can be attributed to two sources of error: manual data cleaning and the small sample size. The removal of author comments, watermarks, and other artifacts in human code reduced authentic human variation in the training data, increasing the homogeneity of the human and AI-generated code. The 64 false positives were likely a result of human code looking clean and structured, resembling AI output. Additionally, the small sample size resulted in less coverage of code style and less variation, potentially allowing for the learning of false patterns. 
 
 ### Implications
-A high recall of 93.50 suggest a reasonable accuracy for use in academic integrity settings. However, the 32% rate of false positives for human can lead to unfair suspicion. Regardless, Aegis's strength lies in its ability to reliably flag AI code. Further investigation can be conducted in the future to limit false positives by expanding training data and adding additional classes, such as "Likely AI" class. 
+A high recall of 93.50% suggests a reasonable accuracy for use in academic integrity settings. However, the 32% rate of false positives for human can lead to unfair suspicion. Regardless, Aegis's strength lies in its ability to reliably flag AI code. Further investigation can be conducted in the future to limit false positives by expanding training data and adding additional classes, such as "Likely AI" class. 
 
 ## Installation
 
@@ -125,6 +125,20 @@ A high recall of 93.50 suggest a reasonable accuracy for use in academic integri
 - **ML Utils**: scikit-learn, safetensors, Hugging Face Hub, tqdm
 - **Tools**: OpenAI, python-dotenv, pytest, Ruff
 
+### Installing uv
+
+Before setting up the project, install uv (if not already installed). See the [uv documentation](https://docs.astral.sh/uv/getting-started/installation/) for more details.
+
+**Option 1: Using cURL**
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+**Option 2: Using pip**
+```bash
+pip install uv
+```
+
 ### Setup
 ```bash
 # Clone the repository
@@ -132,7 +146,11 @@ git clone https://github.com/anthonyq7/aegis.git
 cd aegis
 
 # Install dependencies
+# Option 1: Using requirements.txt
 uv pip install -r requirements.txt
+
+# Option 2: Using uv sync (recommended, uses uv.lock for reproducible installs)
+uv sync
 ```
 
 ### Training
@@ -149,6 +167,29 @@ python model/eval.py
 ```bash
 python data/preprocess.py
 ```
+
+### Testing
+```bash
+# Run all tests
+pytest tests/
+
+# Run with verbose output
+pytest tests/ -v
+
+# Run a specific test file
+pytest tests/test.py
+
+# Or run tests directly
+python tests/test.py
+```
+
+The test suite includes:
+- **Basic sanity tests**: Validates core module imports, Python version, and return types
+- **Data processing**: Checks message structure and JSONL parsing
+
+## CI/CD
+
+Lint and unit tests automatically run on push and pull requests via GitHub Actions. Some tests may be skipped if dependencies are not installed (see `.github/workflows/test.yml`).
 
 ## Contributing
 
