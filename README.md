@@ -232,6 +232,17 @@ The test suite includes:
 
 Lint and unit tests automatically run on push and pull requests via GitHub Actions. Some tests may be skipped if dependencies are not installed (see `.github/workflows/test.yml`).
 
+### Ruff Commands for CI
+
+- **Check code style:**
+  ```bash
+  ruff check .
+  ```
+- **Auto-fix issues (where possible):**
+  ```bash
+  ruff check --fix .
+  ```
+  
 ## Contributing
 
 Contributions are welcome and appreciated.

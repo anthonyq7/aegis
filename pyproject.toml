@@ -35,11 +35,6 @@ build-backend = "setuptools.build_meta"
 packages = ["aegis"]
 
 [tool.ruff]
-# Enable pycodestyle and pyflakes rules
-select = ["E", "W", "F", "I", "N"]
-ignore = ["E501"]  # Ignore line length (black handles this)
-
-# Exclude common directories
 exclude = [
     ".git",
     "__pycache__",
@@ -53,5 +48,9 @@ exclude = [
     "data/raw",
 ]
 
-[tool.ruff.per-file-ignores]
-"__init__.py" = ["F401"]  # Allow unused imports in __init__.py
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "N"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]

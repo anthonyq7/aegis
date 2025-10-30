@@ -3,7 +3,6 @@
 import argparse
 import json
 from argparse import RawDescriptionHelpFormatter
-from math import e
 from pathlib import Path
 from typing import Optional
 
@@ -67,7 +66,7 @@ def main() -> None:
         predictor = Predictor(threshold=0)
     else:
         raise ValueError("Threshold must be a float between 0 and 1")
-        
+
 
     result = predictor.predict(code)
 

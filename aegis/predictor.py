@@ -1,9 +1,9 @@
 """Core logic for the CLI interface"""
 
 from pathlib import Path
+from typing import Optional
 
 import torch
-from typing import Optional
 from huggingface_hub import snapshot_download
 from peft import PeftModel
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
@@ -16,7 +16,7 @@ class Predictor:
         if threshold:
             if not (0.0 <= threshold <= 1.0):
                 raise ValueError("Threshold must be a float between 0 and 1")
-        
+
         if threshold is None:
             self.threshold = 0.5
         else:
