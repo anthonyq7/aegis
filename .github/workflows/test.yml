@@ -18,7 +18,7 @@ jobs:
           python-version: '3.13'
           
       - name: Install dependencies
-        run: pip install pytest pandas sklearn torch transformers
+        run: pip install pytest pandas scikit-learn torch transformers
         
       - name: Run tests
         run: pytest tests/ -v --tb=short
