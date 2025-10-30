@@ -51,12 +51,17 @@ pip install uv
 # Clone the repository
 git clone https://github.com/anthonyq7/aegis.git
 cd aegis
+```
 
-# Install dependencies
-# Option 1: Using requirements.txt
+### **Install dependencies**
+
+**Option 1: Using requirements.txt**
+```bash
 uv pip install -r requirements.txt
+```
 
-# Option 2: Using uv sync (recommended, uses uv.lock for reproducible installs)
+**Option 2: Using uv sync (recommended, uses uv.lock for reproducible installs)**
+```bash
 uv sync
 ```
 
