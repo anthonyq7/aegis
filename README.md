@@ -85,7 +85,10 @@ aegis --file path/to/code.py
 aegis --text "def add(a, b):\n    return a + b"
 
 # JSON output
-aegis --file path/to/code.py --json
+aegis --file path/to/code.py --json > result.json
+
+# Setting a threshold for AI classifciation 
+aegis --threshold 0.7
 
 # Help
 aegis --help

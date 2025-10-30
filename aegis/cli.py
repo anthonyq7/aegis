@@ -3,6 +3,7 @@
 import argparse
 import json
 from argparse import RawDescriptionHelpFormatter
+from math import e
 from pathlib import Path
 from typing import Optional
 
@@ -36,6 +37,7 @@ def main() -> None:
         "  aegis --file path/to/code.py\n"
         "  aegis --text 'def add(a, b): return a + b'\n"
         "  aegis --file script.py --json > result.json\n"
+        "  aegis --threshold 0.7\n"
         )
     )
 
@@ -47,6 +49,9 @@ def main() -> None:
     #output format
     parser.add_argument("--json", action="store_true", help="Output results as JSON")
 
+    #allows users to adjust a threshold
+    parser.add_argument("--threshold", type=float, help="Custom threshold to classify as AI")
+
     #parses args
     args = parser.parse_args()
 
@@ -54,7 +59,16 @@ def main() -> None:
     code = get_code_input(args.text, args.file)
 
     #loads model and makes a prediction
-    predictor = Predictor()
+    if args.threshold is None:
+        predictor = Predictor()
+    elif args.threshold:
+        predictor = Predictor(threshold=args.threshold)
+    elif args.threshold == 0:
+        predictor = Predictor(threshold=0)
+    else:
+        raise ValueError("Threshold must be a float between 0 and 1")
+        
+
     result = predictor.predict(code)
 
     #display results

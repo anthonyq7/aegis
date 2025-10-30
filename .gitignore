@@ -18,3 +18,4 @@ checkpoints/
 *.ckpt
 aegis.egg-info/
 .egg-info/
+build/

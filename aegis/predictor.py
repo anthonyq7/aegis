@@ -3,6 +3,7 @@
 from pathlib import Path
 
 import torch
+from typing import Optional
 from huggingface_hub import snapshot_download
 from peft import PeftModel
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
@@ -10,7 +11,16 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 class Predictor:
 
-    def __init__(self, model_name="anthonyq7/aegis"):
+    def __init__(self, threshold: Optional[float] = None, model_name="anthonyq7/aegis"):
+
+        if threshold:
+            if not (0.0 <= threshold <= 1.0):
+                raise ValueError("Threshold must be a float between 0 and 1")
+        
+        if threshold is None:
+            self.threshold = 0.5
+        else:
+            self.threshold = float(threshold)
 
         self.model_path = self._get_or_download_model(model_name)
         self._load_model()
@@ -74,7 +84,7 @@ class Predictor:
         return {
             "human": human_prob,
             "ai": ai_prob,
-            "prediction": "ai-generated" if float(ai_prob) > float(human_prob) else "human"
+            "prediction": "ai-generated" if float(ai_prob) >= self.threshold else "human"
         }
 
 
