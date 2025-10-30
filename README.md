@@ -53,7 +53,7 @@ git clone https://github.com/anthonyq7/aegis.git
 cd aegis
 ```
 
-### **Install dependencies**
+### Install dependencies
 
 **Option 1: Using requirements.txt**
 ```bash
