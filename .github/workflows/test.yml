@@ -17,8 +17,8 @@ jobs:
         with:
           python-version: '3.13'
           
-      - name: Install pytest
-        run: pip install pytest
+      - name: Install dependencies
+        run: pip intall . #install from pyproject.toml
         
       - name: Run tests
         run: pytest tests/ -v --tb=short
