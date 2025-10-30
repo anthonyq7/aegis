@@ -16,3 +16,5 @@ checkpoints/
 *.h5
 *.hdf5
 *.ckpt
+aegis.egg-info/
+.egg-info/

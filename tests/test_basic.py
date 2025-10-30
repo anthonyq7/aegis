@@ -7,7 +7,7 @@ import pytest
 def test_import_preprocess():
     try:
         import data.preprocess
-        assert hasattr(data.preprocess, 'preprocess')
+        assert hasattr(data.preprocess, "run_preprocess")
     except ModuleNotFoundError:
         pytest.skip("Required dependencies not installed")
 
@@ -15,7 +15,7 @@ def test_import_preprocess():
 def test_import_dataset():
     try:
         import model.dataset
-        assert hasattr(model.dataset, 'CodeDataset')
+        assert hasattr(model.dataset, "CodeDataset")
     except ModuleNotFoundError:
         pytest.skip("Required dependencies not installed")
 

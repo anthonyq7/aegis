@@ -11,7 +11,7 @@ os.makedirs(IN_PATH, exist_ok=True)
 os.makedirs(OUT_PATH, exist_ok=True)
 
 #Returns train split, test split, and validation split
-def preprocess() -> None:
+def run_preprocess() -> None:
     #lines is import since it's json lines file
     human_code_df = pd.read_json(f"{IN_PATH}/human_clean.jsonl", lines=True)
     llm_code_df = pd.read_json(f"{IN_PATH}/llm_code.jsonl", lines=True)
@@ -49,11 +49,11 @@ def preprocess() -> None:
 
 
 def check_balance() -> None:
-    for split in ['train', 'validate', 'test']:
+    for split in ["train", "validate", "test"]:
         df = pd.read_json(f"{OUT_PATH}/{split}.jsonl", lines=True)
 
-        human = sum(df['label'] == 0)
-        llm = sum(df['label'] == 1)
+        human = sum(df["label"] == 0)
+        llm = sum(df["label"] == 1)
         total = len(df)
 
         print(f"\n{split.upper()}:")
@@ -62,6 +62,6 @@ def check_balance() -> None:
         print(f"  LLM: {llm} ({llm/total*100:.1f}%)")
 
 if __name__ == "__main__":
-    preprocess()
+    run_preprocess()
     check_balance()
 

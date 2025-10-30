@@ -4,8 +4,6 @@ import json
 import tempfile
 from pathlib import Path
 
-import pytest
-
 
 #test parsing of jsonl for getting questions used to build openai prompts
 def test_get_questions_parses_jsonl():
@@ -32,13 +30,3 @@ def test_build_message_structure():
     assert msg[0]["role"] == "system"
     assert msg[1]["role"] == "user"
     assert "What is 2+2?" in msg[1]["content"]
-
-#test that dataset module xists
-def test_dataset_module():
-    try:
-        import model.dataset
-        assert hasattr(model.dataset, 'CodeDataset')
-    except ModuleNotFoundError:
-        #skips if not installed
-        pytest.skip("Required dependencies not installed")
-

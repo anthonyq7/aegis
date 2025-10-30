@@ -24,6 +24,16 @@ dependencies = [
     "ruff>=0.6.0",
 ]
 
+[project.scripts]
+aegis = "aegis.cli:main"
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["aegis"]
+
 [tool.ruff]
 # Enable pycodestyle and pyflakes rules
 select = ["E", "W", "F", "I", "N"]

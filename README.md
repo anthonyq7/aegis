@@ -1,7 +1,7 @@
-# Aegis: AI Code Detection Model
+# Aegis: AI Python Code Detection Model
 
 ## Overview
-Aegis is a fine-tuned CodeBERT model that classifies AI-generated and human code. CodeBERT has 125 million parameters, but using LoRA (Low-Rank Adaptation), Aegis was efficiently trained locally with only a subset of the original parameters being updated. The dataset used to train and evaluate Aegis was APPS, a Python benchmark for code generation.
+Aegis is a fine-tuned CodeBERT model that classifies AI-generated and human code. CodeBERT has 125 million parameters, but using LoRA (Low-Rank Adaptation), Aegis was efficiently trained locally with only a subset of the original parameters being updated. The dataset used to train and evaluate Aegis was APPS, a Python benchmark for code generation. Model weights/adapters are hosted on Hugging Face at [anthonyq7/aegis](https://huggingface.co/anthonyq7/aegis).
 
 ## Problem Statement
 **Can we detect AI-generated code in academic and professional settings?**
@@ -21,6 +21,75 @@ Aegis's key features reside in binary classification of Python code snippets. As
 - Binary classification of Python code snippets
 - Efficient fine-tuning using LoRA (Low-Rank Adaptation)
 - Local training with reduced parameter updates
+
+## Installation
+
+### Requirements
+- **Python**: 3.13+
+- **ML/AI**: PyTorch, Transformers, PEFT, Accelerate
+- **Data**: pandas, NumPy, Datasets
+- **Visualization**: matplotlib, seaborn
+- **ML Utils**: scikit-learn, safetensors, Hugging Face Hub, tqdm
+- **Tools**: OpenAI, python-dotenv, pytest, Ruff
+
+### Installing uv
+
+Before setting up the project, install uv (if not already installed). See the [uv documentation](https://docs.astral.sh/uv/getting-started/installation/) for more details.
+
+**Option 1: Using cURL**
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+**Option 2: Using pip**
+```bash
+pip install uv
+```
+
+### Setup
+```bash
+# Clone the repository
+git clone https://github.com/anthonyq7/aegis.git
+cd aegis
+
+# Install dependencies
+# Option 1: Using requirements.txt
+uv pip install -r requirements.txt
+
+# Option 2: Using uv sync (recommended, uses uv.lock for reproducible installs)
+uv sync
+```
+
+### CLI Usage
+
+The project includes a CLI for convenience
+
+DISCLAIMER: The training dataset consists of competitive Python codings questions from [APPS](https://huggingface.co/datasets/codeparrot/apps)
+
+**Install the package in editable mode (from the project root)**:
+```bash
+pip install -e .
+```
+
+**Supported commands**:
+```bash
+# Predicting using a file
+aegis --file path/to/code.py
+
+# Predicting using text
+aegis --text "def add(a, b):\n    return a + b"
+
+# JSON output
+aegis --file path/to/code.py --json
+
+# Help
+aegis --help
+```
+
+**Notes**:
+- On first run, the model adapter is downloaded from the Hugging Face repo [anthonyq7/aegis](https://huggingface.co/anthonyq7/aegis) and cached under `~/.aegis/models`.
+- Internet access is required on the first run; subsequent runs use local cache. 
+- The CLI prints the predicted label and probabilities for human and AI.
 
 ## Key Results
 
@@ -46,7 +115,7 @@ Although the dataset for the training data is relatively small, it provided a co
 
 APPS was chosen after multiple rounds of synthesizing AI-generated code via OpenAI calls attempting to match the code found in [The Stack](https://huggingface.co/datasets/bigcode/the-stack-v2-dedup). The inconsistencies in The Stack dataset made synthetic code too easy to detect, resulting in unrealistically high metrics (99.4% across all measures). To balance cost and effectiveness, Aegis was trained and evaluated on a smaller dataset.
 
-CodeParrot APPS Hugging Face: [Link](https://huggingface.co/datasets/codeparrot/apps)
+[CodeParrot APPS Hugging Face Link](https://huggingface.co/datasets/codeparrot/apps)
 
 ## Methods
 Simply writing scripts to collect the sample data wasn't sufficient. There were many unpredictable markers in the human code: excerpts of the question, comments to mark the author, and watermarks. Given the small size of the dataset, such watermarks were manually removed to make the human code more homogenous. While writing scripts to perform cleaning is more effective, especially when working with larger datasets, manual cleanup in this case saved roughly 90 to 120 minutes. 
@@ -115,43 +184,7 @@ The false positive rate of 32% can be attributed to two sources of error: manual
 ### Implications
 A high recall of 93.50% suggests a reasonable accuracy for use in academic integrity settings. However, the 32% rate of false positives for human can lead to unfair suspicion. Regardless, Aegis's strength lies in its ability to reliably flag AI code. Further investigation can be conducted in the future to limit false positives by expanding training data and adding additional classes, such as "Likely AI" class. 
 
-## Installation
-
-### Requirements
-- **Python**: 3.13+
-- **ML/AI**: PyTorch, Transformers, PEFT, Accelerate
-- **Data**: pandas, NumPy, Datasets
-- **Visualization**: matplotlib, seaborn
-- **ML Utils**: scikit-learn, safetensors, Hugging Face Hub, tqdm
-- **Tools**: OpenAI, python-dotenv, pytest, Ruff
-
-### Installing uv
-
-Before setting up the project, install uv (if not already installed). See the [uv documentation](https://docs.astral.sh/uv/getting-started/installation/) for more details.
-
-**Option 1: Using cURL**
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-
-**Option 2: Using pip**
-```bash
-pip install uv
-```
-
-### Setup
-```bash
-# Clone the repository
-git clone https://github.com/anthonyq7/aegis.git
-cd aegis
-
-# Install dependencies
-# Option 1: Using requirements.txt
-uv pip install -r requirements.txt
-
-# Option 2: Using uv sync (recommended, uses uv.lock for reproducible installs)
-uv sync
-```
+## Scripts
 
 ### Training
 ```bash
