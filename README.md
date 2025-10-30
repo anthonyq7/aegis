@@ -32,9 +32,11 @@ Aegis's key features reside in binary classification of Python code snippets. As
 - **ML Utils**: scikit-learn, safetensors, Hugging Face Hub, tqdm
 - **Tools**: OpenAI, python-dotenv, pytest, Ruff
 
+Aegis is written in [Python](https://www.python.org/downloads/). Installation is required for development and CLI usage. 
+
 ### Installing uv
 
-Before setting up the project, install uv (if not already installed). See the [uv documentation](https://docs.astral.sh/uv/getting-started/installation/) for more details.
+Before setting up the project, install uv (if not already installed). See the [uv docs](https://docs.astral.sh/uv/getting-started/installation/) for more details.
 
 **Option 1: Using cURL**
 ```bash
@@ -88,7 +90,7 @@ aegis --text "def add(a, b):\n    return a + b"
 aegis --file path/to/code.py --json > result.json
 
 # Setting a threshold for AI classifciation 
-aegis --threshold 0.7
+aegis --file path/to/code.py --threshold 0.7
 
 # Help
 aegis --help
@@ -233,6 +235,8 @@ The test suite includes:
 Lint and unit tests automatically run on push and pull requests via GitHub Actions. Some tests may be skipped if dependencies are not installed (see `.github/workflows/test.yml`).
 
 ### Ruff Commands for CI
+
+Ruff is used for linting. See the [Ruff docs](https://docs.astral.sh/ruff/linter/) for more details. 
 
 - **Check code style:**
   ```bash
