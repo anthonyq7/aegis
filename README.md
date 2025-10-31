@@ -20,7 +20,6 @@ Aegis's key features reside in binary classification of Python code snippets. As
 **Key capabilities summary:**
 - Binary classification of Python code snippets
 - Efficient fine-tuning using LoRA (Low-Rank Adaptation)
-- Local training with reduced parameter updates
 
 ## Installation
 
