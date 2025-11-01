@@ -79,6 +79,7 @@ OPENAI_API_KEY=your_openai_api_key_here
 ```
 
 **Hugging Face Token**: Create one at [Hugging Face](https://huggingface.co/docs)
+
 **OpenAI API Key**: Get one from [OpenAI](https://platform.openai.com/docs/overview)
 
 ### CLI Usage
