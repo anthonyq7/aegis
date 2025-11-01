@@ -66,6 +66,21 @@ uv pip install -r requirements.txt
 uv sync
 ```
 
+### Environment Variables
+
+Create a `.env` file in the project root with the following required variables:
+
+```bash
+# Required for downloading data and model from Hugging Face
+HUGGING_FACE_TOKEN=your_huggingface_token_here
+
+# Required for generating AI code samples
+OPENAI_API_KEY=your_openai_api_key_here
+```
+
+**Hugging Face Token**: Create one at [Hugging Face](https://huggingface.co/docs)
+**OpenAI API Key**: Get one from [OpenAI](https://platform.openai.com/docs/overview)
+
 ### CLI Usage
 
 The project includes a CLI for convenience.
