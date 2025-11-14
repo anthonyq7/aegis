@@ -1,6 +1,4 @@
-from transformers import AutoTokenizer, AutoModelForSequenceClassification 
 import torch
-from torch.utils.data import DataLoader
 from dataset import CodeDataset
 from sklearn.metrics import (
     accuracy_score,
@@ -8,6 +6,8 @@ from sklearn.metrics import (
     precision_score,
     recall_score,
 )
+from torch.utils.data import DataLoader
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 model_name = "microsoft/codebert-base"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -45,11 +45,11 @@ with torch.no_grad():
         input_ids = batch["input_ids"].to(device)
         attention_mask = batch["attention_mask"].to(device)
         labels = batch["labels"].to(device)
-        
+
         #forward pass
         outputs = model(input_ids=input_ids, attention_mask=attention_mask)
         preds = torch.argmax(outputs.logits, dim=-1)
-        
+
         #collect predictions and labels
         predictions.extend(preds.cpu().numpy().tolist())
         true_labels.extend(labels.cpu().numpy().tolist())
