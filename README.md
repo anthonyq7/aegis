@@ -198,6 +198,9 @@ Negative = Human (baseline)
 ### Results Analysis
 Aegis had an accuracy of 80.75%, a precision of 74.50%, and a recall of 93.50%. The results indicate that of the predictions flagged as AI-generated, 74.50% were correct. Additionally, the recall of 93.50% suggests that the vast majority of AI code was flagged. The confusion matrix tells a similar story, with 187/200 AI samples correctly identified, leaving only 13 false negatives. The high recall and lower precision demonstrates that the model skews towards flagging AI code. However, Aegis struggles with false positives: of the 200 human code samples, 64 were misclassified as AI, a rate of 32%. 
 
+### Baseline Comparison
+A baseline was achieved by testing CodeBERT using the same test dataset. For the sequence classification task of flagging AI-generated code, CodeBERT achieved an accuracy of 60.25%, a precison of 62.42%, and a recall score of 51.50%. These metrics can be confirmed by running the baseline.py scipt. 
+
 ### Attention Weights Analysis
 ![Alt text](model/results/attention_weights.png)
 
